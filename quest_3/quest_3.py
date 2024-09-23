@@ -1,17 +1,18 @@
-from typing import Set
 import time
 import os
 import psutil
+from typing import List
 
 
 def get_memory_usage():
     """Получение используемой памяти в мегабайтах."""
     process = psutil.Process(os.getpid())
     mem_info = process.memory_info()
+
     return mem_info.rss / (1024 * 1024)
 
 
-def get_list_to_string(input_list: list) -> str:
+def get_list_to_string(input_list: List[int]) -> str:
     """Преобразует список целых чисел в строку."""
     result = ""
 
@@ -23,18 +24,18 @@ def get_list_to_string(input_list: list) -> str:
     return result_array
 
 
-def string_to_set(input_str: str) -> Set[int]:
+def string_to_list(input_str: str) -> List[int]:
     """Преобразует строку, содержащую числа, разделенные пробелами, в множество целых чисел."""
     input_str = input_str.split()
 
-    result_set = set()
+    result_list = []
     for i in input_str:
-        result_set.add(int(i))
+        result_list.append(int(i))
 
-    return result_set
+    return result_list
 
 
-def qick_sort_sym_diff(arr: list) -> list:
+def qick_sort_sym_diff(arr: List[int]) -> List[int]:
     """Алгоритм быстрой сортировки."""
     if len(arr) <= 1:
         return arr
@@ -59,16 +60,29 @@ def qick_sort_sym_diff(arr: list) -> list:
         return qick_sort_sym_diff(left) + middle + qick_sort_sym_diff(right)
 
 
-def find_symmetric_difference(string_values: str):
-    """Нахождение симметрической разности множеств."""
+def find_symmetric_difference_lists(list_a: List[int], list_b: List[int]) -> List[int]:
+    """Нахождение симметрической разности."""
+    sym_diff = []
 
+    for item in list_a:
+        if item not in list_b:
+            sym_diff.append(item)
+
+    for item in list_b:
+        if item not in list_a:
+            sym_diff.append(item)
+
+    return sym_diff
+
+
+def find_symmetric_difference(string_values: str):
+    """Нахождение симметрической разности."""
     parts = string_values.split("0")
 
-    set_a = string_to_set(parts[0].strip())
-    set_b = string_to_set(parts[1].strip())
+    list_a = string_to_list(parts[0].strip())
+    list_b = string_to_list(parts[1].strip())
 
-    sym_diff = set_a.symmetric_difference(set_b)
-    sym_diff = list(sym_diff)
+    sym_diff = find_symmetric_difference_lists(list_a, list_b)
 
     if not sym_diff:
         return "0"
