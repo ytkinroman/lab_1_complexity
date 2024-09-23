@@ -10,26 +10,20 @@ def get_memory_usage():
     return mem_info.rss / (1024 * 1024)
 
 
-def poly_value(coefficients: list, x: int, mod: int) -> int:
-    """Вычисляет значение полинома для заданного значения."""
-    result = 0
-    power_of_x = 1
-
-    for cuff in reversed(coefficients):
-        result = (result + cuff * power_of_x) % mod
-        power_of_x = (power_of_x * x) % mod
-
-    return result
+def poly_value(coefficients: list, x: int, mod: int, power_of_x: int = 1) -> int:
+    """Вычисляет значение полинома для заданного значения с использованием рекурсии."""
+    if not coefficients:
+        return 0
+    else:
+        return (coefficients[-1] * power_of_x + poly_value(coefficients[:-1], x, mod, (power_of_x * x) % mod)) % mod
 
 
 def polynomial_values(coefficients: list, x_values: list, mod: int) -> list:
-    """Вычисляет значения полинома для списка значений аргумента."""
-    results = []
-    for x in x_values:
-        result = poly_value(coefficients, x, mod)
-        results.append(result)
-
-    return results
+    """Вычисляет значения полинома для списка значений."""
+    if not x_values:
+        return []
+    else:
+        return [poly_value(coefficients, x_values[0], mod)] + polynomial_values(coefficients, x_values[1:], mod)
 
 
 def get_result(results: list) -> None:

@@ -34,7 +34,7 @@ def string_to_set(input_str: str) -> Set[int]:
     return result_set
 
 
-def qick_sort_symmetric_difference(arr: list) -> list:
+def qick_sort_sym_diff(arr: list) -> list:
     """Алгоритм быстрой сортировки."""
     if len(arr) <= 1:
         return arr
@@ -56,7 +56,7 @@ def qick_sort_symmetric_difference(arr: list) -> list:
             if x > element:
                 right.append(x)
 
-        return qick_sort_symmetric_difference(left) + middle + qick_sort_symmetric_difference(right)
+        return qick_sort_sym_diff(left) + middle + qick_sort_sym_diff(right)
 
 
 def find_symmetric_difference(string_values: str):
@@ -73,7 +73,7 @@ def find_symmetric_difference(string_values: str):
     if not sym_diff:
         return "0"
     else:
-        sort_diff = qick_sort_symmetric_difference(sym_diff)
+        sort_diff = qick_sort_sym_diff(sym_diff)
 
         result = get_list_to_string(sort_diff)
 
