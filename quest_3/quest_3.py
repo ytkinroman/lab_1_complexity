@@ -8,7 +8,6 @@ def get_memory_usage():
     """Получение используемой памяти в мегабайтах."""
     process = psutil.Process(os.getpid())
     mem_info = process.memory_info()
-
     return mem_info.rss / (1024 * 1024)
 
 
