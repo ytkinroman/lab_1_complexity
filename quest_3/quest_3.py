@@ -4,6 +4,34 @@ import psutil
 from typing import List
 
 
+class QuickSort:
+    def __init__(self, array: List[int]):
+        self.array = array
+
+    def __quick_sort(self, low: int, high: int) -> None:
+        """Алгоритм быстрой сортировки."""
+        if low < high:
+            mid = self.__partition(low, high)
+            self.__quick_sort(low, mid - 1)
+            self.__quick_sort(mid + 1, high)
+
+    def __partition(self, low: int, high: int) -> int:
+        """Функция разделения массива."""
+        pivot = self.array[high]
+        i = low - 1
+        for j in range(low, high):
+            if self.array[j] <= pivot:
+                i += 1
+                self.array[i], self.array[j] = self.array[j], self.array[i]
+        self.array[i + 1], self.array[high] = self.array[high], self.array[i + 1]
+        return i + 1
+
+    def sort(self) -> List[int]:
+        """Сортировка массива с помощью быстрой сортировки."""
+        self.__quick_sort(0, len(self.array) - 1)
+        return self.array
+
+
 def get_memory_usage():
     """Получение используемой памяти в мегабайтах."""
     process = psutil.Process(os.getpid())
@@ -34,31 +62,6 @@ def string_to_list(input_str: str) -> List[int]:
     return result_list
 
 
-def qick_sort_sym_diff(arr: List[int]) -> List[int]:
-    """Алгоритм быстрой сортировки."""
-    if len(arr) <= 1:
-        return arr
-    else:
-        element = arr[0]
-
-        left = []
-        for x in arr:
-            if x < element:
-                left.append(x)
-
-        middle = []
-        for x in arr:
-            if x == element:
-                middle.append(x)
-
-        right = []
-        for x in arr:
-            if x > element:
-                right.append(x)
-
-        return qick_sort_sym_diff(left) + middle + qick_sort_sym_diff(right)
-
-
 def find_symmetric_difference_lists(list_a: List[int], list_b: List[int]) -> List[int]:
     """Нахождение симметрической разности."""
     sym_diff = []
@@ -86,11 +89,10 @@ def find_symmetric_difference(string_values: str):
     if not sym_diff:
         return "0"
     else:
-        sort_diff = qick_sort_sym_diff(sym_diff)
+        qs = QuickSort(sym_diff)
+        sorted_array = qs.sort()
 
-        result = get_list_to_string(sort_diff)
-
-        return result
+        return get_list_to_string(sorted_array)
 
 
 def main() -> None:

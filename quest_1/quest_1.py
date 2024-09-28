@@ -25,9 +25,9 @@ def format_distances(distances: List[int]) -> str:
 
 def format_houses(houses: str) -> List[int]:
     """Преобразует строку, содержащую номера домов, в список целых чисел."""
-    houses = houses.split()  # Разделяем строку на список значений
+    houses = houses.split()
     seen_houses = set()
-    formatted_houses = []  # Список для хранения преобразованных номеров домов
+    formatted_houses = []
 
     for house in houses:
         house_num = int(house)  # Преобразуем строку в целое число
@@ -44,76 +44,24 @@ def format_houses(houses: str) -> List[int]:
     return formatted_houses
 
 
-def calculate_left_distances(houses: List[int], n: int, i: int, left_distances: List[int]) -> None:
-    if i < 0:
-        return
-    if houses[i] == 0:
-        left_distances[i] = 0
-    elif i > 0:
-        calculate_left_distances(houses, n, i - 1, left_distances)
-        left_distances[i] = left_distances[i - 1] + 1
-
-
-def calculate_right_distances(houses: List[int], n: int, i: int, right_distances: List[int]) -> None:
-    if i >= n:
-        return
-    if houses[i] == 0:
-        right_distances[i] = 0
-    elif i < n - 1:
-        calculate_right_distances(houses, n, i + 1, right_distances)
-        right_distances[i] = right_distances[i + 1] + 1
-
-
-def calculate_distances_rec(n: int, houses: str) -> str:
-    """Рекурсивно вычисляет минимальные расстояния до ближайшего свободного участка для каждого дома."""
-    if not (1 <= n <= 10 ** 6):
-        raise ValueError("Переменная n должна быть в диапазоне от 1 до 10^6.")
-
-    houses = format_houses(houses)
-
-    distances = [n] * n
-    left_distances = [n] * n
-    right_distances = [n] * n
-
-    calculate_left_distances(houses, n, n - 1, left_distances)
-    calculate_right_distances(houses, n, 0, right_distances)
-
-    for i in range(n):
-        if left_distances[i] < right_distances[i]:
-            distances[i] = left_distances[i]
-        else:
-            distances[i] = right_distances[i]
-
-    return format_distances(distances)
-
-
 def calculate_distances(n: int, houses: str) -> str:
-    """Вычисляет минимальные расстояния до ближайшего свободного участка для каждого дома."""
+    """Вычисляет минимальные расстояния до ближайшего свободного участка."""
     houses = format_houses(houses)
 
     distances = [n] * n
-    left_distances = [n] * n
-    right_distances = [n] * n
 
     for i in range(n):
         if houses[i] == 0:
-            left_distances[i] = 0
+            distances[i] = 0
         elif i > 0:
-            if left_distances[i] > left_distances[i - 1] + 1:
-                left_distances[i] = left_distances[i - 1] + 1
+            distances[i] = distances[i - 1] + 1
 
     for i in range(n - 1, -1, -1):
         if houses[i] == 0:
-            right_distances[i] = 0
+            distances[i] = 0
         elif i < n - 1:
-            if right_distances[i] > right_distances[i + 1] + 1:
-                right_distances[i] = right_distances[i + 1] + 1
-
-    for i in range(n):
-        if left_distances[i] < right_distances[i]:
-            distances[i] = left_distances[i]
-        else:
-            distances[i] = right_distances[i]
+            if distances[i] > distances[i + 1] + 1:
+                distances[i] = distances[i + 1] + 1
 
     distances = format_distances(distances)
 
@@ -121,13 +69,11 @@ def calculate_distances(n: int, houses: str) -> str:
 
 
 def main() -> None:
-    #  Входные данные.
-
     n = int(input())
     if not (1 <= n <= 10 ** 6):
         raise ValueError("Переменная n должно быть в диапазоне от 1 до 10^6.")
 
-    houses = str(input())
+    houses = input()
 
     start_time = time.perf_counter()  # Таймер (для отслеживания затраченного времени).
 
@@ -148,3 +94,6 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+
